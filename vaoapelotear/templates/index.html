@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block titulo %}
+  Reserva tu cancha y Vao a Pelotear!
+{% endblock titulo %}
+
+{% block files-css %}
+  {% comment %} Add custom CSS here {% endcomment %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static "css/stylish-portfolio.css" %}" media="screen">
+  <link rel="stylesheet" href="{% static "css/registrousuario.css" %}" media="screen">
+{% endblock files-css %}
+
+{% block navbar %}
+  <li><a href="#">Mis Reservas</a></li>
+  <li><a href="#">Mis Puntos</a></li>
+  <li><a href="#">Editar Perfil</a></li>
+{% endblock navbar %}
+
+{% block cuerpo %}
+  {% comment %} Full Page Image Header Area {% endcomment %}
+    <div id="top" class="header">
+      <div class="vert-text">
+        
+        <div class="container">
+          <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12">
+                <div align="center">
+                  <h1 class="hidden-xs">Reserva tu cancha y Vao a pelotear!</h1>
+                  <h2 class="visible-xs">Reserva tu cancha y Vao a pelotear!</h2>
+                </div>
+                <br>
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-12">
+                <div class="hidden-xs">
+                  <button type="submit" class="btn btn-default btn-lg btn3d" id="btnBuscarCancha" onclick="mostrar1()"><span class="glyphicon glyphicon-ok"></span> Reservar en mi Cancha Preferida</button>
+                  <button type="submit" class="btn btn-default btn-lg btn3d" id="btnBuscarCancha" onclick="mostrar2()"><span class="glyphicon glyphicon-map-marker"></span> Encontrar Canchas Disponibles</button>
+                </div>
+                <div class="visible-xs">
+                  <button type="submit" class="btn btn-default btn-lg btn3d" id="btnBuscarCancha" onclick="mostrar1()"><span class="glyphicon glyphicon-ok"></span> Reservar en mi Cancha Preferida</button>
+                  <br>
+                  <br>
+                  <button type="submit" class="btn btn-default btn-lg btn3d" id="btnBuscarCancha" onclick="mostrar2()"><span class="glyphicon glyphicon-map-marker"></span> Encontrar Canchas Disponibles</button>
+                </div>
+                <br>
+                <br>
+              </div>
+              <div class="col-xs-12 col-sm-12 col-md-12">
+                <div id="mostrarBoton1">
+                  <form action="busqueda/canchanombre/" method="POST">
+                    {% csrf_token %}
+                    <div class="col-xs-12 col-sm-12 col-md-10">
+                      <div align="left" class="input-group">
+                        <input type="text" id="txtBusquedaCancha" name="txtBusquedaCancha" class="input-lg form-control typeahead tt-query" placeholder="Nombre de Cancha" size="120" required="required">
+                      </div>
+                      <br>
+                        <div align="right" class="form-group col-xs-6 col-sm-6 col-md-6" >
+                          <div class="input-group">
+                            <input type="text" id="dpcalendario" name="dpcalendario" class="form-control" readonly="true", style="width:120px;">
+                            <span class="input-group-addon glyphicon glyphicon-calendar"></span>
+                          </div>
+                        </div>
+                        <div align="left" class="form-group col-xs-6 col-sm-6 col-md-6">
+                          <div class="input-group">
+                            <select name="cboHoraCancha" id="cboHoraCancha" style="width:140px;" class="form-control">
+                              <option value="07:00 - 08:00">07:00 - 08:00</option>
+                              <option value="08:00 - 09:00">08:00 - 09:00</option>
+                            </select>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-2" align="center">
+                      <br>
+                      <button type="submit" class="btn btn-success btn-lg btn3d" id="btnBuscarCancha1"><span class="glyphicon glyphicon-search"></span> Buscar!</button>
+                    </div>
+                  </form>
+                </div>
+                <div id="mostrarBoton2">
+                  <form action="{% url "login" %}" method="POST" class="form-inline" role="form">
+                    {% csrf_token %}
+                    <div align="center" class="col-xs-12 col-sm-12 col-md-10">
+                      <div class="form-group">
+                        <select id="cboDepartamentos" class="form-control" style="width:170px;" required>
+                          <option value="">DEPARTAMENTO</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <select id="cboProvincias" class="form-control" style="width:170px;" required>
+                          <option value="">PROVINCIA</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <select name="cboDistritos" id="cboDistritos" class="form-control" style="width:170px;" required>
+                          <option value="">DISTRITO</option>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <div class="input-group">
+                          <input type="text" id="dpcalendario2" name="dpcalendario2" class="form-control" readonly="true", style="width:120px;">
+                          <span class="input-group-addon glyphicon glyphicon-calendar"></span>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <select name="cboHoraCancha" id="cboHoraCancha" style="width:140px;" class="form-control">
+                          <option value="07:00 - 08:00">07:00 - 08:00</option>
+                          <option value="08:00 - 09:00">08:00 - 09:00</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-2" align="center">
+                      <button type="submit" class="btn btn-success btn-lg btn3d" id="btnBuscarCancha2"><span class="glyphicon glyphicon-search"></span> Buscar!</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-xs-12 col-sm-10 col-md-10">
+                
+              </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    {% comment %} /Full Page Image Header Area {% endcomment %}
+  
+    {% comment %} Intro {% endcomment %}
+    <div id="about" class="intro">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3 text-center">
+            <h2>Subtle Sidebar is the Perfect Template for your Next Portfolio Website Project!</h2>
+            <p class="lead">This template really has it all. It's up to you to customize it to your liking! It features some fresh photography courtesy of <a target="_blank" href="http://join.deathtothestockphoto.com/">Death to the Stock Photo</a>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% comment %} /Intro {% endcomment %}
+  
+    {% comment %} Services {% endcomment %}
+    <div id="services" class="services">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4 text-center">
+            <h2>Our Services</h2>
+            <hr>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2 col-md-offset-2 text-center">
+            <div class="service-item">
+              <i class="service-icon fa fa-rocket"></i>
+              <h4>Spacecraft Repair</h4>
+              <p>Did your navigation system shut down in the middle of that asteroid field? We can repair any dings and scrapes to your spacecraft!</p>
+            </div>
+          </div>
+          <div class="col-md-2 text-center">
+            <div class="service-item">
+              <i class="service-icon fa fa-magnet"></i>
+              <h4>Problem Solving</h4>
+              <p>Need to know how magnets work? Our problem solving solutions team can help you identify problems and conduct exploratory research.</p>
+            </div>
+          </div>
+          <div class="col-md-2 text-center">
+            <div class="service-item">
+              <i class="service-icon fa fa-shield"></i>
+              <h4>Blacksmithing</h4>
+              <p>Planning a time travel trip to the middle ages? Preserve the space time continuum by blending in with period accurate armor and weapons.</p>
+            </div>
+          </div>
+          <div class="col-md-2 text-center">
+            <div class="service-item">
+              <i class="service-icon fa fa-pencil"></i>
+              <h4>Pencil Sharpening</h4>
+              <p>We've been voted the best pencil sharpening service for 10 consecutive years. If you have a pencil that feels dull, we'll get it sharp!</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% comment %} /Services {% endcomment %}
+
+    {% comment %} Callout {% endcomment %}
+    <div class="callout">
+      <div class="vert-text">
+        <h1>Vao a pelotear!</h1>
+      </div>
+    </div>
+    {% comment %} /Callout {% endcomment %}
+
+    {% comment %} Portfolio {% endcomment %}
+    <div id="portfolio" class="portfolio">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 col-md-offset-4 text-center">
+            <h2>Our Work</h2>
+            <hr>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-2 text-center">
+            <div class="portfolio-item">
+              <a href="#"><img class="img-portfolio img-responsive" src="{% static "img/portfolio-1.jpg" %}"></a>
+              <h4>Cityscape</h4>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="portfolio-item">
+              <a href="#"><img class="img-portfolio img-responsive" src="{% static "img/portfolio-2.jpg" %}"></a>
+              <h4>Is That On Fire?</h4>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-md-offset-2 text-center">
+            <div class="portfolio-item">
+              <a href="#"><img class="img-portfolio img-responsive" src="{% static "img/portfolio-3.jpg" %}"></a>
+              <h4>Stop Sign</h4>
+            </div>
+          </div>
+          <div class="col-md-4 text-center">
+            <div class="portfolio-item">
+              <a href="#"><img class="img-portfolio img-responsive" src="{% static "img/portfolio-4.jpg" %}"></a>
+              <h4>Narrow Focus</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% comment %} /Portfolio {% endcomment %}
+
+    {% comment %} Call to Action {% endcomment %}
+    <div class="call-to-action">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3 text-center">
+            <h3>The buttons below are impossible to resist.</h3>
+            <a href="#" class="btn btn-lg btn-default">Click Me!</a>
+            <a href="#" class="btn btn-lg btn-primary">Look at Me!</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% comment %} /Call to Action {% endcomment %}
+
+    {% comment %} Map {% endcomment %}
+    <div id="contact" class="map">
+      <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;aq=0&amp;oq=twitter&amp;sll=28.659344,-81.187888&amp;sspn=0.128789,0.264187&amp;ie=UTF8&amp;hq=Twitter,+Inc.,+Market+Street,+San+Francisco,+CA&amp;t=m&amp;z=15&amp;iwloc=A"></a></small></iframe>
+    </div>
+    {% comment %} /Map {% endcomment %}
+{% endblock cuerpo %}
+
+{% block footer %}
+  {% comment %} Footer {% endcomment %}
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-md-offset-3 text-center">
+            <ul class="list-inline">
+              <li><i class="fa fa-facebook fa-3x"></i></li>
+              <li><i class="fa fa-twitter fa-3x"></i></li>
+              <li><i class="fa fa-dribbble fa-3x"></i></li>
+            </ul>
+            <div class="top-scroll">
+              <a href="#top"><i class="fa fa-circle-arrow-up scroll fa-4x"></i></a>
+            </div>
+            <hr>
+            <p>Copyright &copy; Company 2013</p>
+          </div>
+        </div>
+      </div>
+    </footer>
+  {% comment %} /Footer {% endcomment %}
+{% endblock footer %}
+
+{% block files-js %}
+  {% comment %} JavaScript {% endcomment %}
+  <script src="{% static "js/utilidades.js" %}"></script>
+  <script src="{% static "js/lugares.js" %}"></script>
+
+  {% comment %} Custom JavaScript for the Side Menu and Smooth Scrolling {% endcomment %}
+  <script>
+      $("#menu-close").click(function(e) {
+          e.preventDefault();
+          $("#sidebar-wrapper").toggleClass("active");
+      });
+  </script>
+  <script>
+      $("#menu-toggle").click(function(e) {
+          e.preventDefault();
+          $("#sidebar-wrapper").toggleClass("active");
+      });
+  </script>
+  <script>
+    $(function() {
+      $('a[href*=#]:not([href=#])').click(function() {
+        if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') 
+          || location.hostname == this.hostname) {
+
+          var target = $(this.hash);
+          target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+          if (target.length) {
+            $('html,body').animate({
+              scrollTop: target.offset().top
+            }, 1000);
+            return false;
+          }
+        }
+      });
+    });
+  </script>
+{% endblock files-js %}

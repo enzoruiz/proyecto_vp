@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block titulo %} Reserva tu cancha y Vao a Pelotear! {% endblock titulo %}
+
+{% block navbar %}
+  	<li><a href="#">Mis Reservas</a></li>
+  	<li><a href="#">Mis Puntos</a></li>
+  	<li><a href="#">Editar Perfil</a></li>
+{% blockend navbar %}
+
+{% block cuerpo %}
+	<div class="container">	
+		<div class="row">
+			<div class="col-sm-12">
+				<br><br><br>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="well">
+					<div class="row">
+
+						<form action="/" method="POST">
+							<div class="col-xs-12 col-sm-12 col-md-2" align="center" style="padding-top:11px;">
+								<button class="btn btn-default btn-md btn3d" id="btnBuscarCancha" onclick="mostrar1()"><span class="glyphicon glyphicon-ok"></span> Mi Cancha Preferida</button>
+								<br>
+								<br>
+								<button class="btn btn-default btn-md btn3d" id="btnBuscarCancha" onclick="mostrar2()"><span class="glyphicon glyphicon-map-marker"></span> Canchas Disponibles</button>
+							</div>
+		                    <div class="col-xs-12 col-sm-12 col-md-10">
+		                      	<div id="mostrarBoton1">
+				                	<form action="/" method="POST" role="form">
+				                    	<div class="col-xs-12 col-sm-12 col-md-10">
+				                      		<div align="left" class="input-group">
+				                      			<input type="text" id="txtBusquedaCancha" name="txtBusquedaCancha" class="input-lg form-control typeahead tt-query" placeholder="Nombre de Cancha" size="120" required="required">
+				                      		</div>
+				                      		<br>
+				                        	<div align="right" class="form-group col-xs-6 col-sm-6 col-md-6" >
+					                          	<div class="input-group">
+					                          		<input type="text" id="dpcalendario" name="dpcalendario" class="form-control" readonly="true" style="width:120px;">
+					                            	<span class="input-group-addon glyphicon glyphicon-calendar"></span>
+					                          	</div>
+				                        	</div>
+				                        	<div align="left" class="form-group col-xs-6 col-sm-6 col-md-6">
+				                          		<div class="input-group">
+				                          			<select name="cboHoraCancha" id="cboHoraCancha" style="width:140px;" class="form-control">
+							                          	<option value="07:00 - 08:00">07:00 - 08:00</option>
+							                          	<option value="08:00 - 09:00">08:00 - 09:00</option>
+							                        </select>
+				                          		</div>
+				                        	</div>
+				                    	</div>
+				                    	<div class="col-xs-12 col-sm-12 col-md-2" align="center">
+				                      		<br>
+				                      		<button type="submit" class="btn btn-success btn-lg btn3d" id="btnBuscarCancha1"><span class="glyphicon glyphicon-search"></span> Buscar!</button>
+				                    	</div>
+				                  	</form>
+				                </div>
+				                <div id="mostrarBoton2">
+				                	<form action="/" method="POST" role="form" class="form-inline">
+				                		{% csrf_token %}
+				                    	<div align="center" class="col-xs-12 col-sm-12 col-md-10">
+				                      		<div class="form-group">
+				                        		<select id="cboDepartamentos" class="form-control" style="width:170px;" required>
+				                          			<option value="">DEPARTAMENTO</option>
+				                        		</select>
+				                      		</div>
+				                      		<div class="form-group">
+				                        		<select id="cboProvincias" class="form-control" style="width:170px;" required>
+				                          			<option value="">PROVINCIA</option>
+				                        		</select>
+				                      		</div>
+				                      		<div class="form-group">
+				                        		<select name="cboDistritos" id="cboDistritos" class="form-control" style="width:170px;" required>
+				                          			<option value="">DISTRITO</option>
+				                        		</select>
+				                      		</div>
+				                      		<div class="form-group">
+				                        		<div class="input-group">
+				                        			<input type="text" id="dpcalendario2" name="dpcalendario2" class="form-control" readonly="true" style="width:120px;">
+				                          			<span class="input-group-addon glyphicon glyphicon-calendar"></span>
+				                        		</div>
+				                      		</div>
+				                      		<div class="form-group">
+				                      			<select name="cboHoraCancha" id="cboHoraCancha" style="width:140px;" class="form-control">
+							                        <option value="07:00 - 08:00">07:00 - 08:00</option>
+							                        <option value="08:00 - 09:00">08:00 - 09:00</option>
+							                    </select>
+				                      		</div>
+				                    	</div>
+				                    	<div class="col-xs-12 col-sm-12 col-md-2" align="center">
+				                    		<button type="submit" class="btn btn-success btn-lg btn3d" id="btnBuscarCancha2"><span class="glyphicon glyphicon-search"></span> Buscar!</button>
+				                    	</div>
+				                  	</form>
+				                </div>
+		                    </div>
+		                </form>
+							
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-xs-12 col-sm-12 col-md-10">
+
+				<div class="panel panel-success">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+						    <div class="row">
+								<div class="col-md-9 col-sm-8 col-xs-12" align="left">
+									<h2><strong>{{ $local->nombre }}</strong> <small>{{ $local->provincia . ', ' . $local->distrito }}</small></h2>
+								</div>
+								<div class="col-md-3 col-sm-4 col-xs-12" align="right">
+									<h4>
+										<label class="label label-primary">Calificación</label><br><br>
+										@for ($i = 0; $i < $local->calificacion ; $i++)
+											<img src="{{ asset('assets/img/trophy.png') }}" alt="">
+										@endfor
+										@for ($i = 0; $i < (5-$local->calificacion) ; $i++)
+											<img src="{{ asset('assets/img/trophy-empty.png') }}" alt="">
+										@endfor
+									</h4>
+								</div>
+							</div>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="row">
+									<div class="col-sm-12">
+										<a href="" class="thumbnail" data-toggle="modal" data-target="#lightbox">
+											<img class="img-rounded img-responsive" src="{{ asset('assets/img') . '/' . $local->nombre .'_'. $local->direccion .'/'. $local->fotoprincipal }}" alt="">
+										</a>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6 hidden-xs">
+										<a href="" class="thumbnail" data-toggle="modal" data-target="#lightbox">
+											<img class="img-rounded" src="{{ asset('assets/img') . '/' . $local->nombre .'_'. $local->direccion .'/'. $local->foto2 }}" alt="">
+										</a>
+									</div>
+									<div class="col-sm-6 hidden-xs">
+										<a href="" class="thumbnail" data-toggle="modal" data-target="#lightbox">
+											<img class="img-rounded" src="{{ asset('assets/img') . '/' . $local->nombre .'_'. $local->direccion .'/'. $local->foto3 }}" alt="">
+										</a>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6">
+								{{ Form::open(array('url' => 'datosconfirmar', 'method' => 'POST', 'role' => 'form', 'id' => 'frmAlquiler')) }}
+									<div class="form-group">
+										<label>Dirección: </label>
+    									<p class="form-control-static">{{ $local->direccion }}</p>
+									</div>
+									<div class="form-group">
+										<label>Telefono: </label>
+    									<p class="form-control-static">{{ $local->telefono }}</p>
+									</div>
+									<div class="form-group">
+										<label>Servicios: </label>
+    									<p class="form-control-static"><a>Ver Servicios</a></p>
+									</div>
+									<div align="center" class="col-sm-12">
+	    								<button type="button" class="btn btn-info btn3d" id="btnVerCalendario" onclick="verCalendario({{ $local->idlocal }})"><span class="glyphicon glyphicon-calendar"></span> Ver Calendario</button>
+									</div>
+									<br><br><br>
+									<div align="center" class="col-sm-12">
+										<table class="table table-bordered">
+		    								<tr>
+		    									<td colspan="3" align="center">
+		    										Dia: {{ $fecha }} - Hora: {{ $hora }}
+		    										{{ Form::hidden('txtFecha', $fecha, array('id' => 'txtFecha')) }}
+		    										{{ Form::hidden('txtHora', $hora, array('id' => 'txtHora')) }}
+		    										{{ Form::hidden('txtIdCancha', '', array('id' => 'txtIdCancha')) }}
+		    										{{ Form::hidden('txtPrecio', '', array('id' => 'txtPrecio')) }}
+		    									</td>
+		    								</tr>
+		    								<tr>
+		    									<td align="center">Cancha</td>
+		    									<td align="center">Precio</td>
+		    									<td></td>
+		    								</tr>
+		    								@foreach ($canchas as $cancha)
+			    								<tr>
+			    									<td align="center">{{ $cancha->descripcion }}</td>
+			    									<td align="center">S/. {{ $cancha->precio }}</td>
+			    									<td align="center">
+			    										@if (Auth::check())
+			    											<button name="btnRealizarAlquiler" id="btnRealizarAlquiler" class="btn btn-success btn3d" onclick="enviardatos('{{ $cancha->idcancha . '_' . $cancha->precio }}')" ><span class='glyphicon glyphicon-ok'></span> Reservar</button>
+														@else
+															{{ Form::button("<span class='glyphicon glyphicon-ok'></span> Reservar", array('id' => 'btnNecesitaLogueo', 'class' => 'btn btn-success btn3d', 'onclick' => 'necesitaLogueo()')) }}
+														@endif
+			    									</td>
+			    								</tr>
+			    							@endforeach
+		    							</table>
+									</div>
+								{{ Form::close() }}
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="col-md-1"></div>
+		</div>
+	</div>
+{% endblock cuerpo %}
+
+{% block footer %}
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<footer>
+					<div class="well">FOOTER</div>
+				</footer>
+			</div>
+		</div>
+	</div>
+{% endblock footer %}
+
+{% block files-js %}
+	{% load static %}
+	<script src="{static "js/alquiler.js"}"></script>
+	<script src="{static "js/utilidades.js"}"></script>
+	<script src="{static "js/lugares.js"}"></script>
+{% endblock files-js %}

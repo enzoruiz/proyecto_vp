@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title> {% block titulo %} {% endblock titulo %}</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static "css/bootstrap.css" %}" media="screen">
+    <link rel="stylesheet" href="{% static "css/arreglo-typeahead.css" %}" media="screen">
+    <link rel="stylesheet" href="{% static "css/botones3d.css" %}" media="screen">
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" media="screen">
+    <link rel="stylesheet" href="{% static "font-awesome/css/font-awesome.min.css" %}" media="screen">
+    <link rel="stylesheet" href="{% static "css/form-ingresar.css" %}" media="screen">
+    <link rel="stylesheet" href="{% static "css/lightbox.css" %}" media="screen">
+
+    {% block files-css %} {% endblock files-css %}
+
+  </head>
+
+  <body>
+    
+  <div class="container">
+    {% comment %} Lightbox {% endcomment %}
+    <div id="lightbox" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <div class="modal-content">
+          <div class="modal-body">
+            <img src="" alt="" />
+          </div>
+        </div>
+      </div>
+    </div> {% comment %} /Lightbox {% endcomment %}
+    {% comment %} Modal {% endcomment %}
+    <div class="modal fade" id="modal-ingreso" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Entra y Reserva tu cancha</h4>
+          </div>
+          <div class="modal-body">
+
+            <div class="main">
+
+              <div class="row">
+                <form method="POST" role="form">
+                  {% csrf_token %}
+                  <div class="col-xs-12 col-sm-12 col-md-12">
+                    
+                      <fieldset>
+                        <h2 class="text-center"><strong>Registrate ahora y te regalamos 1000 puntos de bienvenida!</strong></h2>
+                        <div class="row">
+                          <div class="col-xs-6 col-sm-6 col-md-6">
+                            <a href="{% url 'social:begin' 'facebook' %}" class="btn btn-lg btn-primary btn-block btn3d">Facebook</a>
+                          </div>
+                          <div class="col-xs-6 col-sm-6 col-md-6">
+                            <a href="#" class="btn btn-lg btn-info btn-block btn3d">Google</a>
+                          </div>
+                        </div>
+                        <br>
+                        <hr class="colorgraph">
+                        <div class="form-group">
+                          <input type="text" id="inputUsernameEmail" name="username" class="form-control input-lg" required="required" placeholder="Username o Email">
+                        </div>
+                        <div class="form-group">
+                          <input type="password" id="inputPassword" name="password" class="form-control input-lg" required="required" placeholder="Contraseña">
+                        </div>
+                        <div class="form-group">
+                          <a href="{% url "registro" %}" class="btn btn-link pull-left">Aun no tienes cuenta?</a>
+                          <a href="" class="btn btn-link pull-right">Olvidaste tu contraseña?</a>
+                        </div>
+                        <br>
+                        <hr class="colorgraph">
+                        <div class="row">
+                          <div class="col-xs-12 col-sm-12 col-md-12">
+                            <input type="submit" class="btn btn-lg btn-primary btn3d btn-block" value="Ingresar">
+                          </div>
+                        </div>
+                      </fieldset>
+                    
+                  </div>
+                </form>
+              </div>
+                  
+            </div>
+
+          </div>
+        </div>{% comment %} /Modal-content {% endcomment %}
+      </div>{% comment %} /Modal-dialog {% endcomment %}
+    </div>{% comment %} /Modal {% endcomment %}
+  </div>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <ul class="nav navbar-nav hidden-xs">
+          <li><a class="navbar-brand" href="{% url 'loginHome' %}">Vao a Pelotear!</a></li>
+          <li><a href="#">Premios</a></li>
+        </ul>
+        {% if user.is_authenticated %}
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i> {{ user.username }}</a>
+              <ul class="dropdown-menu">
+                {% block navbar %}
+                {% endblock navbar %}
+                <li class="divider"></li>
+                <li><a href="{% url "logout" %}"><i class="glyphicon glyphicon-off"></i> Cerrar Sesion</a></li>
+              </ul>
+            </li>
+          </ul>
+        {% else %}
+          <button class="navbar-right btn btn-primary btn-sm btn3dMargin" data-toggle="modal" data-target="#modal-ingreso">Ingresa</button>
+        {% endif %}
+      </div>
+    </nav>
+  
+    {% block cuerpo %} {% endblock cuerpo %}
+
+    {% block footer %} {% endblock footer %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+    <script src="{% static "js/bootstrap.js" %}"></script>
+    <script src="{% static "js/typeahead.jquery.js" %}"></script>
+    <script src="{% static "js/bloodhound.js" %}"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="{% static "js/jquery.ui.datepicker-es.js" %}"></script>
+    <script src="{% static "js/lightbox.js" %}"></script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('#dpcalendario').datepicker({
+          defaultDateType : new Date(),
+          dateFormat: "dd/mm/yy",
+          minDate: new Date()
+        });
+        $('#dpcalendario').datepicker('setDate', new Date());
+        $('#dpcalendario2').datepicker({
+          defaultDateType : new Date(),
+          dateFormat: "dd/mm/yy",
+          minDate: new Date()
+        });
+        $('#dpcalendario2').datepicker('setDate', new Date());
+        $('#txtFechaNacimientoUser').datepicker({
+          defaultDateType : new Date(),
+          dateFormat: "dd/mm/yy",
+        });
+        $('#txtFechaNacimientoUser').datepicker();
+        
+
+        var canchas = new Bloodhound({
+          datumTokenizer: function(d) { 
+              return Bloodhound.tokenizers.whitespace(d.nombre); 
+          },
+          queryTokenizer: Bloodhound.tokenizers.whitespace,
+          prefetch: '{% url "search-cancha" %}'
+        });
+        canchas.clearPrefetchCache();
+        canchas.initialize();
+
+        $('#txtBusquedaCancha').typeahead(null, {
+          name: 'listacanchas',
+          displayKey: 'nombre',
+          source: canchas.ttAdapter()
+        });
+
+      });
+      $("#menu-toggle").click(function(e) {
+              e.preventDefault();
+              $("#wrapper").toggleClass("active");
+      });
+    </script>
+    {% block files-js %} {% endblock files-js %}
+
+  </body>
+
+</html>

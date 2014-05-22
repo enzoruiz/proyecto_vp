@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block titulo %} Reserva tu cancha y Vao a Pelotear! {% endblock titulo %}
+
+{% block files-css %}
+	{% load static %}
+	<link rel="stylesheet" href="{% static "css/sidebar-left.css" %}" media="screen">
+{% endblock files-css %}
+
+{% block navbar %}
+  	<li><a href="#">Mis Reservas</a></li>
+  	<li><a href="#">Mis Puntos</a></li>
+  	<li><a href="#">Editar Perfil</a></li>
+{% endblock navbar %}
+
+{% block cuerpo %}
+	<div class="container">
+		<br><br><br>
+		<div class="row">
+			<div class="col-md-12">
+				<div id="wrapper" class="active">
+      
+			      	{% comment %} Sidebar {% endcomment %}
+			            {% comment %} Sidebar {% endcomment %}
+			      	<div id="sidebar-wrapper">
+			      		<ul id="sidebar_menu" class="sidebar-nav">
+			           		<li class="sidebar-brand"><a id="menu-toggle" href="#">Menu<span id="main_icon" class="glyphicon glyphicon-align-justify"></span></a></li>
+			      		</ul>
+			        	<ul class="sidebar-nav" id="sidebar">     
+			          		<li><a href="{% url "loginHome" %}">Las Canchas<span class="sub_icon glyphicon glyphicon-user"></span></a></li>
+			          		<li><a href="{% url "loginHome" %}">Los Periodos<span class="sub_icon glyphicon glyphicon-bookmark"></span></a></li>
+			        	</ul>
+			      	</div>
+			          
+			      	{% comment %} Page content {% endcomment %}
+			      	<div id="page-content-wrapper">
+			        	{% comment %} Keep all page content within the page-content inset div! {% endcomment %}
+			        	<div class="page-content inset">
+			          		<div class="row">
+			              		<div class="col-xs-12 col-md-12">
+			              			<div class="jumbotron">
+			              				<h1 align="center">Periodos</h1>
+			              			</div>
+			              			<div class="row">
+			              				<div class="col-md-2"></div>
+			              				<div class="col-md-8">
+			              					{% comment %} ACA VAN MENSAJES DE ERROR {% endcomment %}
+			              					{% if mensaje %}
+												<div class="alert alert-success fade in">
+													<button class="close" data-dismiss="alert" href="#" aria-hidden="true">x</button>
+													{{ mensaje }}
+												</div>
+											{% endif %}
+
+											{% if errorValidar %}
+												<div class="alert alert-danger fade in">
+													<button class="close" data-dismiss="alert" href="#" aria-hidden="true">x</button>
+													{{ errorValidar }}
+												</div>
+											{% endif %}
+											<div class="well">
+												<legend><h3>Nuevo Periodo</h3></legend>
+												<form method="POST" id="frmPeriodos" name="frmPeriodos">
+													{% csrf_token %}
+													<div class="form-group">
+						              					<label for="cboLocal" class="col-md-3 control-label">Local: </label>
+						              					<div class="col-md-9">
+						              						<select name="cboLocal" id="cboLocal" class="form-control" onchange="dameCanchas()" required>
+						              							<option value="">Selecciona Local</option>
+						              							{% for local in locales %}
+						              								<option value="{{ local.id }}">{{ local.nombre }}</option>
+						              							{% endfor %}
+						              						</select>
+						              					</div>
+						              				</div>
+						              				<div class="form-group">
+					              						<label for="cboCancha" class="col-md-3 control-label">Cancha: </label>
+					              						<div class="col-md-9">
+					              							<select name="cboCancha" id="cboCancha" class="form-control" style="width:150px;" required>
+									                          	<option value="">Cancha</option>
+									                        </select>
+					              						</div>
+					              					</div>
+					              					<div class="form-group">
+					              						<label for="dias" class="col-md-3 control-label">Dia(s): </label>
+														<div class="col-md-7">
+															<label class="checkbox-inline">
+																<input type="checkbox" name="chkLunes" id="chkLunes">Lunes
+															</label>
+															<label class="checkbox-inline">
+																<input type="checkbox" name="chkMartes" id="chkMartes">Martes
+															</label>
+															<label class="checkbox-inline">
+																<input type="checkbox" name="chkMiercoles" id="chkMiercoles">Miercoles
+															</label>
+															<label class="checkbox-inline">
+																<input type="checkbox" name="chkJueves" id="chkJueves">Jueves
+															</label>
+															<label class="checkbox-inline">
+																<input type="checkbox" name="chkViernes" id="chkViernes">Viernes
+															</label>
+															<label class="checkbox-inline">
+																<input type="checkbox" name="chkSabado" id="chkSabado">Sabado
+															</label>
+															<label class="checkbox-inline">
+																<input type="checkbox" name="chkDomingo" id="chkDomingo">Domingo
+															</label>
+						              					</div>
+					              					</div>
+													<div class="form-group">
+														<label for="horaInicio" class="col-md-3 control-label">Hora de Inicio: </label>
+														<div class="col-md-9">
+															<select name="cboHoraInicio" id="cboHoraInicio" class="form-control" style="width:100px;" required>
+																<option value="1">07:00</option>
+                          										<option value="2">08:00</option>
+															</select>
+						              					</div>
+													</div>
+													<div class="form-group">
+														<label for="horaFin" class="col-md-3 control-label">Hora de Termino: </label>
+														<div class="col-md-9">
+															<select name="cboHoraFin" id="cboHoraFin" class="form-control" style="width:100px;" required>
+                          										<option value="2">08:00</option>
+                          										<option value="3">09:00</option>
+															</select>
+						              					</div>
+													</div>
+													<div class="form-group">
+														<label for="precioPeriodo" class="col-md-3 control-label">Precio: </label>
+														<div class="col-md-9">
+															<input type="text" name="txtPrecioPeriodo" id="txtPrecioPeriodo" class="form-control" style="width:100px;" required>
+						              					</div>
+													</div>
+													<div class="form-group">
+					              						<div class="col-md-offset-3 col-md-9">
+					              							<button type="submit" id="btnRegistrarPeriodo" class="btn btn-default btn3d"><span class="glyphicon glyphicon-floppy-disk"></span> Guardar</button>
+					              						</div>
+					              					</div>
+												</form>
+											</div>
+			              				</div>
+			              				<div class="col-md-2"></div>
+			              			</div>
+			            		</div>
+			            		{% comment %} FOOTER {% endcomment %}
+			            		<div class="col-xs-12 col-sm-12">
+									<footer>
+										<div class="well">FOOTER</div>
+									</footer>
+								</div>
+								{% comment %} /FOOTER {% endcomment %}
+			          		</div>
+			        	</div>
+			      	</div>
+			      
+			    </div>
+			</div>
+		</div>
+	</div>
+{% endblock cuerpo %}
+
+{% block files-js %}
+	<script src="{% static "js/periodo.js" %}"></script>
+{% endblock files-js %}

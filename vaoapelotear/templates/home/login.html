@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block titulo %} Reserva tu cancha y Vao a Pelotear! {% endblock %}
+
+{% block files-css %}
+	{% load static %}
+	<link rel="stylesheet" href="{% static "css/registrousuario.css" %}" media="screen">
+{% endblock files-css %}
+
+{% block navbar %}
+  	<li><a href="#">Mis Reservas</a></li>
+  	<li><a href="#">Mis Puntos</a></li>
+  	<li><a href="#">Editar Perfil</a></li>
+{% endblock navbar %}
+
+{% block cuerpo %}
+	<div class="container">	
+		<div class="row">
+			<div class="col-sm-12">
+				<br><br><br>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="well">
+					<div class="row">
+						
+						<form action="/" method="POST">
+							<div class="col-xs-12 col-sm-12 col-md-2" align="center" style="padding-top:11px;">
+								<button class="btn btn-default btn-md btn3d" id="btnBuscarCancha" onclick="mostrar1()"><span class="glyphicon glyphicon-ok"></span> Mi Cancha Preferida</button>
+								<br>
+								<br>
+								<button class="btn btn-default btn-md btn3d" id="btnBuscarCancha" onclick="mostrar2()"><span class="glyphicon glyphicon-map-marker"></span> Canchas Disponibles</button>
+							</div>
+		                    <div class="col-xs-12 col-sm-12 col-md-10">
+		                      	<div id="mostrarBoton1">
+				                	<form action="/" method="POST" role="form">
+				                    	<div class="col-xs-12 col-sm-12 col-md-10">
+				                      		<div align="left" class="input-group">
+				                      			<input type="text" id="txtBusquedaCancha" name="txtBusquedaCancha" class="input-lg form-control typeahead tt-query" placeholder="Nombre de Cancha" size="120" required="required">
+				                      		</div>
+				                      		<br>
+				                        	<div align="right" class="form-group col-xs-6 col-sm-6 col-md-6" >
+					                          	<div class="input-group">
+					                          		<input type="text" id="dpcalendario" name="dpcalendario" class="form-control" readonly="true" style="width:120px;">
+					                            	<span class="input-group-addon glyphicon glyphicon-calendar"></span>
+					                          	</div>
+				                        	</div>
+				                        	<div align="left" class="form-group col-xs-6 col-sm-6 col-md-6">
+				                          		<div class="input-group">
+				                          			<select name="cboHoraCancha" id="cboHoraCancha" style="width:140px;" class="form-control">
+							                          	<option value="07:00 - 08:00">07:00 - 08:00</option>
+							                          	<option value="08:00 - 09:00">08:00 - 09:00</option>
+							                        </select>
+				                          		</div>
+				                        	</div>
+				                    	</div>
+				                    	<div class="col-xs-12 col-sm-12 col-md-2" align="center">
+				                      		<br>
+				                      		<button type="submit" class="btn btn-success btn-lg btn3d" id="btnBuscarCancha1"><span class="glyphicon glyphicon-search"></span> Buscar!</button>
+				                    	</div>
+				                  	</form>
+				                </div>
+				                <div id="mostrarBoton2">
+				                	<form action="/" method="POST" role="form" class="form-inline">
+				                		{% csrf_token %}
+				                    	<div align="center" class="col-xs-12 col-sm-12 col-md-10">
+				                      		<div class="form-group">
+				                        		<select id="cboDepartamentos" class="form-control" style="width:170px;" required>
+				                          			<option value="">DEPARTAMENTO</option>
+				                        		</select>
+				                      		</div>
+				                      		<div class="form-group">
+				                        		<select id="cboProvincias" class="form-control" style="width:170px;" required>
+				                          			<option value="">PROVINCIA</option>
+				                        		</select>
+				                      		</div>
+				                      		<div class="form-group">
+				                        		<select name="cboDistritos" id="cboDistritos" class="form-control" style="width:170px;" required>
+				                          			<option value="">DISTRITO</option>
+				                        		</select>
+				                      		</div>
+				                      		<div class="form-group">
+				                        		<div class="input-group">
+				                        			<input type="text" id="dpcalendario2" name="dpcalendario2" class="form-control" readonly="true" style="width:120px;">
+				                          			<span class="input-group-addon glyphicon glyphicon-calendar"></span>
+				                        		</div>
+				                      		</div>
+				                      		<div class="form-group">
+				                      			<select name="cboHoraCancha" id="cboHoraCancha" style="width:140px;" class="form-control">
+							                        <option value="07:00 - 08:00">07:00 - 08:00</option>
+							                        <option value="08:00 - 09:00">08:00 - 09:00</option>
+							                    </select>
+				                      		</div>
+				                    	</div>
+				                    	<div class="col-xs-12 col-sm-12 col-md-2" align="center">
+				                    		<button type="submit" class="btn btn-success btn-lg btn3d" id="btnBuscarCancha2"><span class="glyphicon glyphicon-search"></span> Buscar!</button>
+				                    	</div>
+				                  	</form>
+				                </div>
+		                    </div>
+		                </form>
+							
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-sm-3"></div>
+			<div class="col-sm-6">
+				<div class="col-xs-12 col-sm-12 col-md-12">
+                  	<div class="well">
+                  		<form method="POST" role="form">
+                  			{% csrf_token %}
+		                    <fieldset>
+		                       	<h2 class="text-center"><strong>Registrate ahora y te regalamos 1000 puntos de bienvenida!</strong></h2>
+		                       	<div class="row">
+			                       	<div class="col-xs-6 col-sm-6 col-md-6">
+			                       		<a href="#" class="btn btn-lg btn-primary btn-block">Facebook</a>
+			                       	</div>
+			                       	<div class="col-xs-6 col-sm-6 col-md-6">
+			                       		<a href="#" class="btn btn-lg btn-info btn-block">Google</a>
+			                      	</div>
+		                       	</div>
+		                       	<br>
+		                       	<hr class="colorgraph">
+			                    <div class="form-group">
+			                	   	<input type="text" id="inputUsernameEmail" name="username" class="form-control input-lg" required="required" placeholder="Username o Email">
+			                    </div>
+			                    <div class="form-group">
+			                      	<input type="password" id="inputPassword" name="password" class="form-control input-lg" required="required" placeholder="Contraseña">
+			                    </div>
+			                    <div class="form-group">
+			                      	<a href="{% url "login" %}" class="btn btn-link pull-left">Aun no tienes cuenta?</a>
+			                      	<a href="" class="btn btn-link pull-right">Olvidaste tu contraseña?</a>
+			                    </div>
+		                        <br>
+		                        <hr class="colorgraph">
+			                    <div class="row">
+			                      	<div class="col-xs-12 col-sm-12 col-md-12">
+			                          	<input type="submit" class="btn btn-lg btn-primary btn3d btn-block" value="Ingresar">
+			                       	</div>
+			                    </div>
+		                    </fieldset>
+		                </form>
+                	</div>
+              	</div>
+			</div>
+			<div class="col-sm-3"></div>
+		</div>
+	</div>
+{% endblock cuerpo %}
+
+{% block footer %}
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<footer>
+					<div class="well">FOOTER</div>
+				</footer>
+			</div>
+		</div>
+	</div>
+{% endblock footer %}
+
+{% block files-js %}
+	<script src="{% static "js/registrousuario.js" %}"></script>
+	<script src="{% static "js/utilidades.js" %}"></script>
+  	<script src="{% static "js/lugares.js" %}"></script>
+{% endblock files-js %}

@@ -1,0 +1,16 @@
+<html>
+<head>
+	<title>LOCALES</title>
+</head>
+<body>
+	{% if local %}
+		<h3>{{ local }}</h3>
+	{% else %}
+		<h1>NADA DE LOCALES</h1>
+	{% endif %}
+
+	{% for periodo in periodos %}
+		<h4>{{ periodo.dia.cancha }} - {{ periodo.precio }}</h4>
+	{% endfor %}
+</body>
+</html>
