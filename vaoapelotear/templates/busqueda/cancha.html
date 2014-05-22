@@ -4,13 +4,17 @@
 </head>
 <body>
 	{% if local %}
-		<h3>{{ local }}</h3>
+		<h3>{{ local.direccion }}</h3>
 	{% else %}
 		<h1>NADA DE LOCALES</h1>
 	{% endif %}
 
 	{% for periodo in periodos %}
 		<h4>{{ periodo.dia.cancha }} - {{ periodo.precio }}</h4>
+	{% endfor %}
+
+	{% for palabra in calificacion %}
+		<h3>HOLA jaja</h3>
 	{% endfor %}
 </body>
 </html>

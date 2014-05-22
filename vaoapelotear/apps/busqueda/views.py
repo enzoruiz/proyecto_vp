@@ -26,7 +26,11 @@ class CanchaNombreView(TemplateView):
 
 		# local = Local.objects.get(nombre=nombre, cancha__dia__periodo__hora__horaingreso=horaIngreso, cancha__dia__nombre=nombreDia)
 		local = Local.objects.get(nombre=nombre)
+		listaCalif = {0 : '', 1 : 'x', 2 :'xx', 3 : 'xxx', 4 : 'xxxx', 5 : 'xxxxx'}
+		trofeoDorado = listaCalif[local.calificacion]
+		trofeoGris = listaCalif[5 - local.calificacion]
+
 		canchas = Cancha.objects.filter(local=local, dia__periodo__hora__horaingreso=horaIngreso, dia__nombre=nombreDia)
 		periodos = Periodo.objects.filter(dia__cancha__local=local, hora__horaingreso=horaIngreso, dia__nombre=nombreDia)
 
-		return render(request, 'busqueda/cancha.html', {"local": local, "periodos": periodos})
+		return render(request, 'busqueda/canchanombre.html', {"local": local, "periodos": periodos, "dorados": trofeoDorado, "grises": trofeoGris})

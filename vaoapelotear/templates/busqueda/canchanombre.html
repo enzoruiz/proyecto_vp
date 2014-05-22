@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block titulo %} Reserva tu cancha y Vao a Pelotear! {% endblock titulo %}
 
@@ -6,7 +7,7 @@
   	<li><a href="#">Mis Reservas</a></li>
   	<li><a href="#">Mis Puntos</a></li>
   	<li><a href="#">Editar Perfil</a></li>
-{% blockend navbar %}
+{% endblock navbar %}
 
 {% block cuerpo %}
 	<div class="container">	
@@ -110,17 +111,18 @@
 						<h3 class="panel-title">
 						    <div class="row">
 								<div class="col-md-9 col-sm-8 col-xs-12" align="left">
-									<h2><strong>{{ $local->nombre }}</strong> <small>{{ $local->provincia . ', ' . $local->distrito }}</small></h2>
+									<h2><strong>{{ local.nombre }}</strong> <small>{{ local.distrito.provincia.nombre}},  {{local.distrito.nombre }}</small></h2>
 								</div>
 								<div class="col-md-3 col-sm-4 col-xs-12" align="right">
 									<h4>
 										<label class="label label-primary">Calificación</label><br><br>
-										@for ($i = 0; $i < $local->calificacion ; $i++)
-											<img src="{{ asset('assets/img/trophy.png') }}" alt="">
-										@endfor
-										@for ($i = 0; $i < (5-$local->calificacion) ; $i++)
-											<img src="{{ asset('assets/img/trophy-empty.png') }}" alt="">
-										@endfor
+										{% for trofeos in dorados %}
+											<img src="{% static "img/trophy.png" %}" alt="">
+										{% endfor %}
+
+										{% for trofeos in grises %}
+											<img src="{% static "img/trophy-empty.png" %}" alt="">
+										{% endfor %}
 									</h4>
 								</div>
 							</div>
@@ -132,50 +134,46 @@
 								<div class="row">
 									<div class="col-sm-12">
 										<a href="" class="thumbnail" data-toggle="modal" data-target="#lightbox">
-											<img class="img-rounded img-responsive" src="{{ asset('assets/img') . '/' . $local->nombre .'_'. $local->direccion .'/'. $local->fotoprincipal }}" alt="">
+											<img class="img-rounded img-responsive" src="{% static "img/fotos/Koala.jpg" %}" alt="">
 										</a>
 									</div>
 								</div>
 								<div class="row">
 									<div class="col-sm-6 hidden-xs">
 										<a href="" class="thumbnail" data-toggle="modal" data-target="#lightbox">
-											<img class="img-rounded" src="{{ asset('assets/img') . '/' . $local->nombre .'_'. $local->direccion .'/'. $local->foto2 }}" alt="">
+											<img class="img-rounded" src="{% static "img/fotos/Koala.jpg" %}" alt="">
 										</a>
 									</div>
 									<div class="col-sm-6 hidden-xs">
 										<a href="" class="thumbnail" data-toggle="modal" data-target="#lightbox">
-											<img class="img-rounded" src="{{ asset('assets/img') . '/' . $local->nombre .'_'. $local->direccion .'/'. $local->foto3 }}" alt="">
+											<img class="img-rounded" src="{% static "img/fotos/Koala.jpg" %}" alt="">
 										</a>
 									</div>
 								</div>
 							</div>
 							<div class="col-sm-6">
-								{{ Form::open(array('url' => 'datosconfirmar', 'method' => 'POST', 'role' => 'form', 'id' => 'frmAlquiler')) }}
+								<form method="POST" role="form" id="frmAlquiler">
+									{% csrf_token %}
 									<div class="form-group">
 										<label>Dirección: </label>
-    									<p class="form-control-static">{{ $local->direccion }}</p>
+    									<p class="form-control-static">{{ local.direccion }}</p>
 									</div>
 									<div class="form-group">
 										<label>Telefono: </label>
-    									<p class="form-control-static">{{ $local->telefono }}</p>
+    									<p class="form-control-static">{{ local.telefono }}</p>
 									</div>
 									<div class="form-group">
 										<label>Servicios: </label>
     									<p class="form-control-static"><a>Ver Servicios</a></p>
 									</div>
 									<div align="center" class="col-sm-12">
-	    								<button type="button" class="btn btn-info btn3d" id="btnVerCalendario" onclick="verCalendario({{ $local->idlocal }})"><span class="glyphicon glyphicon-calendar"></span> Ver Calendario</button>
+	    								<button type="button" class="btn btn-info btn3d" id="btnVerCalendario" onclick="verCalendario({{ local.id }})"><span class="glyphicon glyphicon-calendar"></span> Ver Calendario</button>
 									</div>
 									<br><br><br>
 									<div align="center" class="col-sm-12">
 										<table class="table table-bordered">
 		    								<tr>
 		    									<td colspan="3" align="center">
-		    										Dia: {{ $fecha }} - Hora: {{ $hora }}
-		    										{{ Form::hidden('txtFecha', $fecha, array('id' => 'txtFecha')) }}
-		    										{{ Form::hidden('txtHora', $hora, array('id' => 'txtHora')) }}
-		    										{{ Form::hidden('txtIdCancha', '', array('id' => 'txtIdCancha')) }}
-		    										{{ Form::hidden('txtPrecio', '', array('id' => 'txtPrecio')) }}
 		    									</td>
 		    								</tr>
 		    								<tr>
@@ -183,22 +181,22 @@
 		    									<td align="center">Precio</td>
 		    									<td></td>
 		    								</tr>
-		    								@foreach ($canchas as $cancha)
+		    								{% for periodo in periodos %}
 			    								<tr>
-			    									<td align="center">{{ $cancha->descripcion }}</td>
-			    									<td align="center">S/. {{ $cancha->precio }}</td>
+			    									<td align="center">{{ periodo.dia.cancha.descripcion }}</td>
+			    									<td align="center">S/. {{ periodo.precio }}</td>
 			    									<td align="center">
-			    										@if (Auth::check())
-			    											<button name="btnRealizarAlquiler" id="btnRealizarAlquiler" class="btn btn-success btn3d" onclick="enviardatos('{{ $cancha->idcancha . '_' . $cancha->precio }}')" ><span class='glyphicon glyphicon-ok'></span> Reservar</button>
-														@else
-															{{ Form::button("<span class='glyphicon glyphicon-ok'></span> Reservar", array('id' => 'btnNecesitaLogueo', 'class' => 'btn btn-success btn3d', 'onclick' => 'necesitaLogueo()')) }}
-														@endif
+			    										{% if user.is_authenticated %}
+			    											<button name="btnRealizarAlquiler" id="btnRealizarAlquiler" class="btn btn-success btn3d" onclick="enviardatos('{{ periodo.id }}_{{periodo.precio }}')" ><span class='glyphicon glyphicon-ok'></span> Reservar</button>
+			    										{% else %}
+			    											<button name="btnNecesitaLogueo" id="btnNecesitaLogueo" class="btn btn-success btn3d" onclick="necesitaLogueo()" ><span class='glyphicon glyphicon-ok'></span> Reservar</button>
+														{% endif %}
 			    									</td>
 			    								</tr>
-			    							@endforeach
+			    							{% endfor %}
 		    							</table>
 									</div>
-								{{ Form::close() }}
+								</form>
 							</div>
 						</div>
 					</div>
@@ -223,8 +221,7 @@
 {% endblock footer %}
 
 {% block files-js %}
-	{% load static %}
-	<script src="{static "js/alquiler.js"}"></script>
-	<script src="{static "js/utilidades.js"}"></script>
-	<script src="{static "js/lugares.js"}"></script>
+	<script src="{% static "js/utilidades.js" %}"></script>
+  	<script src="{% static "js/lugares.js" %}"></script>
+  	<script src="{% static "js/alquiler.js" %}"></script>
 {% endblock files-js %}
